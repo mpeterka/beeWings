@@ -81,6 +81,13 @@ jsPlumb.ready(function() {
 			refreshLoketniIndex();
 		}
 	});
+	
+	var offset = $("#canvas").offset();
+	$(".point").each(function(index, el) {
+		var $el = $(el);
+		$el.offset({top: $el.offset().top + offset.top, left: $el.offset().left + offset.left});
+	});
+	jsPlumb.repaintEverything();
 
 });
 
@@ -151,3 +158,25 @@ $(document).ready(function() {
 		refreshPlot();
 	});
 });
+
+
+var viewImage = function(el) {
+	// get the input element
+	var $image = $("#canvas");
+
+	if (el.files && el.files.length > 0) {
+		var file = el.files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			console.log(e.target.result);
+			$image.css("background-image", "url(" + e.target.result + ")");
+			var image = new Image();
+			image.onload = function(evt) {
+				$("#canvas").css("width", this.width).css("height", this.height);
+			};
+			image.src = e.target.result;
+			
+		};
+		reader.readAsDataURL(file);
+	}
+};

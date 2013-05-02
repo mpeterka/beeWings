@@ -26,6 +26,11 @@
 <script type="text/javascript" src="app.js"></script>
 </head>
 <body>
+
+	<form>
+		<input type="file" accept="image/*" onchange="viewImage(this)"/>
+	</form>
+
 	<div id="canvas">
 		<div id="p0" class="point discoidal-angle">0</div>
 		<div id="p3" class="point discoidal-angle">3</div>
@@ -49,6 +54,10 @@
 		<div id="graph">
 		</div>
 		
+	</div>
+	
+	<div id="utils" style="display:none;">
+		<img />
 	</div>
 </body>
 </html>

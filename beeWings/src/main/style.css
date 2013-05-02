@@ -18,6 +18,9 @@
 	text-align: center;
 	user-select: none;
 }
+.point.discoidal-shift {
+	background-color: blue;
+}
 #p0 {
 	left: 543px;
 	top: 43px;
@@ -42,4 +45,9 @@
 #p4 {
 	left: 399px;
 	top: 99px;
+}
+
+#graph {
+	width: 230px;
+	height: 380px;
 }

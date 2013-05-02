@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>beeWings</title>
+<style type="text/css">
+#canvas {
+	width: 605px;
+	height: 266px;
+	border: 1px solid #ccc;
+	background-image: url(img/wing.gif);
+	background-repeat: no-repeat;
+}
+.point {
+	border: 1px solid #0f0;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #f00;
+	opacity: 0.8;
+	position: absolute;
+	color: white;
+	font-size: 8px;
+	text-align: center;
+	user-select: none;
+}
+#p0 {
+	left: 543px;
+	top: 43px;
+}
+#p3 {
+	left: 402px;
+	top: 177px;
+}
+#p7 {
+	left: 298px;
+	top: 50px;
+}
+
+#p1 {
+	left: 455px;
+	top: 110px;
+}
+#p2 {
+	left: 435px;
+	top: 117px;
+}
+#p4 {
+	left: 399px;
+	top: 99px;
+}
+</style>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript"
+	src="lib/jquery.jsPlumb-1.3.16-all-min.js"></script>
+<script type="text/javascript">
+//http://vigorbee.cz/files/kridla-manual.pdf
+var c07;
+var p0, p7, p3;
+var c12, c24;
+var p1, p2, p4;
+
+var getPosition = function(obj) {
+	return $(obj).offset();
+};
+
+var getDistance = function(point1, point2) {
+	var position1 = getPosition(point1);
+	var position2 = getPosition(point2);
+	return Math.sqrt(Math.pow(position1.top - position2.top, 2) + Math.pow(position1.left - position2.left, 2));
+};
+
+var loketniIndex = function() {
+	return getDistance($("#p2"), $("#p4")) / getDistance($("#p2"), $("#p1"));
+}
+
+jsPlumb.ready(function() {
+	jsPlumb.setRenderMode(jsPlumb.SVG);
+	
+	jsPlumb.importDefaults({
+		DragOptions : { cursor: "pointer", zIndex:2000 },
+		ConnectionsDetachable: false,
+		Anchors: ["AutoDefault"],
+		Connector: ["Straight"],
+		Endpoint: ["Blank"],
+		EndpointsOnTop: false,
+		PaintStyle: {
+			lineWidth : 2,
+			strokeStyle : "red"
+		},
+		LogEnabled: true,
+		MaxConnections: 2
+	});
+	
+	var endpointOptions = { 
+	}; 
+	p0 = jsPlumb.addEndpoint('p0', { anchor:"LeftMiddle" }, endpointOptions );
+	p3 = jsPlumb.addEndpoint('p3', { anchor:"AutoDefault" }, endpointOptions );
+	p7 = jsPlumb.addEndpoint('p7', { anchor:"RightMiddle" }, endpointOptions );
+	
+	var c07 = jsPlumb.connect({ 
+		source: p0,
+		target: p7
+	});
+	
+	
+	p1 = jsPlumb.addEndpoint('p1', { anchor:"LeftMiddle" }, endpointOptions );
+	p2 = jsPlumb.addEndpoint('p2', { anchor:"LeftMiddle" }, endpointOptions );
+	c12 = jsPlumb.connect({
+			source : p1,
+			target : p2,
+		});
+	
+	p4 = jsPlumb.addEndpoint('p4', { anchor:"RightMiddle" }, endpointOptions );
+	c24 = jsPlumb.connect({
+		source : p2,
+		target : p4,
+	});
+	
+	jsPlumb.draggable(jsPlumb.getSelector(".point"));
+	
+	//jsPlumb.getSelector(".point");
+	jsPlumb.getSelector(".point").bind("beforeDrag", function(connection){
+		console.log(connection);
+	});
+
+});
+
+$(document).ready(function() {
+	$("#calculateBtn").click(function() {
+		$("#loketniIndex").text(loketniIndex());
+	});
+});
+</script>
+</head>
+<body>
+	<div id="canvas">
+		<div id="p0" class="point">0</div>
+		<div id="p3" class="point">3</div>
+		<div id="p7" class="point">7</div>
+
+		<div id="p1" class="point">1</div>
+		<div id="p2" class="point">2</div>
+		<div id="p4" class="point">4</div>
+	</div>
+	
+	<div id="result">
+		<div id="loketniIndex">?</div>
+		<button id="calculateBtn">refresh</button>
+	</div>
+</body>
+</html>

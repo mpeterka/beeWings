@@ -1,0 +1,45 @@
+#canvas {
+	width: 605px;
+	height: 266px;
+	border: 1px solid #ccc;
+	background-image: url(img/wing.gif);
+	background-repeat: no-repeat;
+}
+.point {
+	border: 1px solid #0f0;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #f00;
+	opacity: 0.8;
+	position: absolute;
+	color: white;
+	font-size: 8px;
+	text-align: center;
+	user-select: none;
+}
+#p0 {
+	left: 543px;
+	top: 43px;
+}
+#p3 {
+	left: 402px;
+	top: 177px;
+}
+#p7 {
+	left: 298px;
+	top: 50px;
+}
+
+#p1 {
+	left: 455px;
+	top: 110px;
+}
+#p2 {
+	left: 435px;
+	top: 117px;
+}
+#p4 {
+	left: 399px;
+	top: 99px;
+}

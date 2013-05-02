@@ -20,6 +20,16 @@ var loketniIndex = function() {
 	return getDistance($("#p2"), $("#p4")) / getDistance($("#p2"), $("#p1"));
 };
 
+var discoidalAngle = function() {
+	var p0 = getPosition($("#p0"));
+	var p3 = getPosition($("#p3"));
+	var p5 = getPosition($("#p5"));
+	var p7 = getPosition($("#p7"));
+	
+	// TODO: magic
+	return null;
+};
+
 jsPlumb.ready(function() {
 	jsPlumb.setRenderMode(jsPlumb.SVG);
 	
@@ -66,12 +76,6 @@ jsPlumb.ready(function() {
 	
 	jsPlumb.draggable(jsPlumb.getSelector(".point"));
 	
-	//jsPlumb.getSelector(".point");
-	jsPlumb.getSelector(".point").bind("beforeDrag", function(connection){
-		console.log(connection);
-	});
-	
-
 	$(".point").draggable({
 		stop : function() {
 			refreshLoketniIndex();
@@ -81,7 +85,7 @@ jsPlumb.ready(function() {
 });
 
 var refreshLoketniIndex = function() {
-	$("#loketniIndex").text(loketniIndex());
+	$("#loketni-index").text(loketniIndex());
 };
 
 var refreshPlot = function() {
@@ -114,16 +118,16 @@ var refreshPlot = function() {
 	var ctx = plot.getCanvas().getContext("2d");
 
 	// carnica
-	drawRegion(ctx, plot.pointOffset({ x: 0, y: 2}), plot.pointOffset({ x: 10, y: 4}), "rgba(0, 0, 165, 0.2)", "rgba(0, 0, 165, 1)");
+	drawRegion(ctx, plot.pointOffset({ x: 0, y: 2}), plot.pointOffset({ x: 10, y: 4}), "rgba(0, 0, 165, 0.2)", "rgba(0, 0, 165, 1)", "carnica");
 	
 	// caucasia
-	drawRegion(ctx, plot.pointOffset({ x: -10, y: 1.7}), plot.pointOffset({ x: 0, y: 3.2}), "rgba(0, 165, 0, 0.2)", "rgba(0, 165, 0, 1)");
+	drawRegion(ctx, plot.pointOffset({ x: -10, y: 1.7}), plot.pointOffset({ x: 0, y: 3.2}), "rgba(0, 165, 0, 0.2)", "rgba(0, 165, 0, 1)", "caucasia");
 	
 	// mellifera
-	drawRegion(ctx, plot.pointOffset({ x: -10, y: 0.5}), plot.pointOffset({ x: 2, y: 2.1}), "rgba(127, 127, 0, 0.2)", "rgba(127, 127, 0, 1)");
+	drawRegion(ctx, plot.pointOffset({ x: -10, y: 0.5}), plot.pointOffset({ x: 2, y: 2.1}), "rgba(127, 127, 0, 0.2)", "rgba(127, 127, 0, 1)", "mellifera");
 };
 
-var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor) {
+var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor, text) {
 	ctx.shadowBlur = 10;
 	ctx.shadowColor = shadowColor;
 	ctx.fillStyle = fillColor;
@@ -134,6 +138,11 @@ var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor) {
 	ctx.lineTo(posTop.left, posTop.top);
 	ctx.lineTo(posBottom.left, posTop.top);
 	ctx.fill();
+	
+	ctx.fillStyle = 'black';
+	ctx.font = 'italic bold 12px sans-serif';
+	ctx.textBaseline = 'bottom';
+	ctx.fillText(text, posBottom.left + 5, posBottom.top - 5);
 };
 
 $(document).ready(function() {

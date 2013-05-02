@@ -18,7 +18,7 @@
 	text-align: center;
 	user-select: none;
 }
-.point.discoidal-shift {
+.point.discoidal-angle {
 	background-color: blue;
 }
 #p0 {
@@ -28,6 +28,10 @@
 #p3 {
 	left: 402px;
 	top: 177px;
+}
+#p5 {
+	left: 405px;
+	top: 58px;
 }
 #p7 {
 	left: 298px;

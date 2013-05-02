@@ -1,0 +1,18 @@
+{
+	"app": {
+		"title": "Křídla"
+	},
+	
+	"button": {
+		"add": "Přidat"
+	},
+	"bee": {
+		"discoidalAngle": "Diskoidální úhel",
+		"elbowIndex": "Loketní index",
+		"breed": {
+			"carnica": "carnica (kraňské pl.)",
+			"caucasia": "caucasia (kavkazské pl.)",
+			"mellifera": "mellifera (tmavé pl.)"
+		}
+	}
+}

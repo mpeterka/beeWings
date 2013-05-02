@@ -16,7 +16,7 @@ var getDistance = function(point1, point2) {
 	return Math.sqrt(Math.pow(position1.top - position2.top, 2) + Math.pow(position1.left - position2.left, 2));
 };
 
-var loketniIndex = function() {
+var elbowIndex = function() {
 	return getDistance($("#p2"), $("#p4")) / getDistance($("#p2"), $("#p1"));
 };
 
@@ -78,7 +78,7 @@ jsPlumb.ready(function() {
 	
 	$(".point").draggable({
 		stop : function() {
-			refreshLoketniIndex();
+			refreshElbowIndex();
 		}
 	});
 	
@@ -91,8 +91,8 @@ jsPlumb.ready(function() {
 
 });
 
-var refreshLoketniIndex = function() {
-	$("#loketni-index").text(loketniIndex());
+var refreshElbowIndex = function() {
+	$("#elbow-index").text(elbowIndex());
 };
 
 var refreshPlot = function() {
@@ -125,13 +125,13 @@ var refreshPlot = function() {
 	var ctx = plot.getCanvas().getContext("2d");
 
 	// carnica
-	drawRegion(ctx, plot.pointOffset({ x: 0, y: 2}), plot.pointOffset({ x: 10, y: 4}), "rgba(0, 0, 165, 0.2)", "rgba(0, 0, 165, 1)", "carnica");
+	drawRegion(ctx, plot.pointOffset({ x: 0, y: 2}), plot.pointOffset({ x: 10, y: 4}), "rgba(0, 0, 165, 0.2)", "rgba(0, 0, 165, 1)", $.t("bee.breed.carnica"));
 	
 	// caucasia
-	drawRegion(ctx, plot.pointOffset({ x: -10, y: 1.7}), plot.pointOffset({ x: 0, y: 3.2}), "rgba(0, 165, 0, 0.2)", "rgba(0, 165, 0, 1)", "caucasia");
+	drawRegion(ctx, plot.pointOffset({ x: -10, y: 1.7}), plot.pointOffset({ x: 0, y: 3.2}), "rgba(0, 165, 0, 0.2)", "rgba(0, 165, 0, 1)", $.t("bee.breed.caucasia"));
 	
 	// mellifera
-	drawRegion(ctx, plot.pointOffset({ x: -10, y: 0.5}), plot.pointOffset({ x: 2, y: 2.1}), "rgba(127, 127, 0, 0.2)", "rgba(127, 127, 0, 1)", "mellifera");
+	drawRegion(ctx, plot.pointOffset({ x: -10, y: 0.5}), plot.pointOffset({ x: 2, y: 2.1}), "rgba(127, 127, 0, 0.2)", "rgba(127, 127, 0, 1)", $.t("bee.breed.mellifera"));
 };
 
 var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor, text) {
@@ -147,15 +147,21 @@ var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor, text) 
 	ctx.fill();
 	
 	ctx.fillStyle = 'black';
-	ctx.font = 'italic bold 12px sans-serif';
+	ctx.font = 'italic 10px sans-serif';
 	ctx.textBaseline = 'bottom';
 	ctx.fillText(text, posBottom.left + 5, posBottom.top - 5);
 };
 
 $(document).ready(function() {
 	$("#addBtn").click(function() {
-		results.push([0, loketniIndex()]);
+		results.push([0, elbowIndex()]);
 		refreshPlot();
+	});
+	$.i18n.init({
+		debug: false,
+		lng: "cs-CZ"
+	}, function() {
+		$("html").i18n();
 	});
 });
 
@@ -168,7 +174,6 @@ var viewImage = function(el) {
 		var file = el.files[0];
 		var reader = new FileReader();
 		reader.onload = function(e) {
-			console.log(e.target.result);
 			$image.css("background-image", "url(" + e.target.result + ")");
 			var image = new Image();
 			image.onload = function(evt) {

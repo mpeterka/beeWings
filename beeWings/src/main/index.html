@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-<title>beeWings</title>
+<title data-i18n="app.title">beeWings</title>
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 
 <!-- jQuery -->
@@ -23,10 +23,16 @@
 <script type="text/javascript"
 	src="lib/jquery.flot.js"></script>
 
+<!-- i18next -->
+<script type="text/javascript"
+	src="lib/i18next-1.6.0.min.js"></script>
+
 <script type="text/javascript" src="app.js"></script>
 </head>
 <body>
 
+	<h1 data-i18n="app.title">beeWings</h1>
+	
 	<form>
 		<input type="file" accept="image/*" onchange="viewImage(this)"/>
 	</form>
@@ -43,13 +49,17 @@
 	</div>
 	
 	<div id="result">
-		Loketní index:
-		<div id="loketni-index">?</div>
+		<label data-i18n="bee.elbowIndex">
+			Loketní index:
+		</label>
+		<div id="elbow-index">?</div>
 		
-		diskoidální úhel
+		<label data-i18n="bee.discoidalAngle">
+			diskoidální úhel
+		</label>
 		<div id="discoidal-angle">?</div>
 		
-		<button id="addBtn">add</button>
+		<button id="addBtn" data-i18n="button.add">add</button>
 		
 		<div id="graph">
 		</div>

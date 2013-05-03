@@ -20,15 +20,74 @@ var elbowIndex = function() {
 	return getDistance($("#p2"), $("#p4")) / getDistance($("#p2"), $("#p1"));
 };
 
+/**
+ * "Beemorph" algorithm
+ */
 var discoidalAngle = function() {
-	var p0 = getPosition($("#p0"));
-	var p3 = getPosition($("#p3"));
-	var p5 = getPosition($("#p5"));
-	var p7 = getPosition($("#p7"));
+	var B = getPosition($("#p0"));
+	var bx = B.left;
+	var by = B.top;
+	var G = getPosition($("#p3"));
+	var gx = G.left;
+	var gy = G.top;
+	var F = getPosition($("#p5"));
+	var fx = F.left;
+	var fy = G.top;
+	var A = getPosition($("#p7"));
+	var ax = A.left;
+	var ay = A.top;
 	
-	// TODO: magic
-	return null;
+	var abxDiff = ax - bx;// AB X diff
+	var abyDiff = ay - by;// AB Y diff
+	var abLen = Math.pow(abxDiff*abxDiff + abyDiff*abyDiff, 0.5); // Length AB
+	
+	var afxDiff = ax - fx;
+	var afyDiff = ay - fy;
+	var afLen = Math.pow(afxDiff*afxDiff + afyDiff*afyDiff, 0.5);
+	
+	var bfxDiff = bx - fx;
+	var bfyDiff = by - fy;
+	var bfLen = Math.pow(bfxDiff*bfxDiff + bfyDiff*bfyDiff, 0.5);
+	
+	var cosAbfAngle = ((abLen*abLen + bfLen*bfLen - afLen*afLen)/(2*abLen*bfLen));// Cos Angle ABF
+	//var abfAngle = Math.acos(cosAbfAngle); //Angle ABF
+	
+	var bhLen = cosAbfAngle * bfLen;
+	var bhAbRat = bhLen / abLen; // Ration BH/AB
+	
+	var hx = bx + (bhAbRat * abxDiff);
+	var hy = by + (bhAbRat * abyDiff);
+	
+	var hgxDiff = hx - gx;
+	var hgyDiff = hy - gy;
+	var hgLen = Math.pow(hgxDiff*hgxDiff + hgyDiff*hgyDiff, 0.5);
+	
+	var bgxDiff = bx - gx;
+	var bgyDiff = by - gy;
+	var bgLen = Math.pow(bgxDiff*bgxDiff + bgyDiff*bgyDiff, 0.5);
+	
+	var agxDiff = ax - gx;
+	var agyDiff = ay - gy;
+	var agLen = Math.pow(agxDiff*agxDiff + agyDiff*agyDiff, 0.5);
+	
+	// Angle BHG Degrees
+	var bhgAngle = toDegrees(Math.acos((bhLen*bhLen + hgLen*hgLen - bgLen*bgLen)/(2 * bhLen * hgLen)));
+	
+	// DISCOIDAL SHIFT
+	var discoidalShift = 90 - bhgAngle * sign(bgLen - agLen);
+
+	return -1 * discoidalShift;// beemorph fix
 };
+
+function toDegrees(angle) {
+	return angle * (180 / Math.PI);
+}
+
+function sign(n) {
+	if (n < 0) {return -1;};
+	if (n > 0) {return 1;};
+	return 0;
+}
 
 jsPlumb.ready(function() {
 	jsPlumb.setRenderMode(jsPlumb.SVG);
@@ -79,6 +138,7 @@ jsPlumb.ready(function() {
 	$(".point").draggable({
 		stop : function() {
 			refreshElbowIndex();
+			refreshDiscoidalAngle();
 		}
 	});
 	
@@ -93,6 +153,9 @@ jsPlumb.ready(function() {
 
 var refreshElbowIndex = function() {
 	$("#elbow-index").text(elbowIndex());
+};
+var refreshDiscoidalAngle = function() {
+	$("#discoidal-angle").text(discoidalAngle());
 };
 
 var refreshPlot = function() {
@@ -154,7 +217,7 @@ var drawRegion = function(ctx, posBottom, posTop, fillColor, shadowColor, text) 
 
 $(document).ready(function() {
 	$("#addBtn").click(function() {
-		results.push([0, elbowIndex()]);
+		results.push([discoidalAngle(), elbowIndex()]);
 		refreshPlot();
 	});
 	$.i18n.init({
